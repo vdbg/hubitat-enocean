@@ -1,0 +1,29 @@
+
+[enocean]
+port = "/dev/ttyUSB0"               # USB path the EnOcean USB stick is plugged-in. 
+
+# Connection info to the Hubitat hub.
+# Note: the device running the script and the hubitat hub need to be on the same LAN
+[hubitat]
+url = 'http://ipaddress/'               # What you type in the browser to log on to Hubitat.
+app_id = 123                            # Log in to Hubitat, go in Apps, Maker API. The Id in is in the url.
+token = 'enter your hubitat token here' # Log in to Hubitat, go in Apps, Maker API, The token is in the examples. 
+
+[main]
+log_verbosity = "INFO" # By increasing level of verbosity = FATAL, ERROR, WARNING, INFO, DEBUG.
+
+# Maps an EnOcean button to a Hubitat virtual device
+# In this example, we map the two buttons on an EnOcean device to two Hubitat virtual devices
+# There can be any number of devices
+# To find the values of EnOcean's id and button: start the app and look at warnings in the app's logs when pressing buttons
+# They will be of the form: "WARNING - Received signal from non-Hubitat mapped EnOcean device <id>, button <button>"
+[mapper.First]
+enocean_id = 1234567         # should be marked on the EnOcean device; if not, run app, press button, look at logs
+enocean_button = "Button BO" # name of button if EnOcean device has more than 1 button. Press button and look at logs
+hubitat_id = 123             # Id of Hubitat virtual device
+
+# Second mapping. There can be any number of these
+[mapper.Second]
+enocean_id = 1234567
+enocean_button = "Button BI"
+hubitat_id = 456
