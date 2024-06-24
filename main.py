@@ -24,8 +24,6 @@ if sys.version_info < (SUPPORTED_PYTHON_MAJOR, SUPPORTED_PYTHON_MINOR):
 
 try:
     config = Config("config.toml", "hubitat_enocean").load()
-    logging.info("HELLOO!")
-
     main_conf = config["main"]
     logging.getLogger().setLevel(logging.getLevelName(main_conf["log_verbosity"]))
 

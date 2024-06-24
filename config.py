@@ -6,8 +6,10 @@ import os
 from pathlib import Path
 
 # support loading toml files in older versions of Python
-try: import tomllib
-except ModuleNotFoundError: import tomli as tomllib
+try: 
+    import tomllib
+except ModuleNotFoundError: 
+    import tomli as tomllib
 
 class Config:
     def __init__(self, file: str, prefix: str) -> None:
@@ -27,7 +29,6 @@ class Config:
         if not ret:
             raise Exception(f"File template.{self._file} required.")
 
-        print(ret)
         # overwrite template with config, if exists
         config = self.__load__(self._file)
         if config:

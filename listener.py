@@ -56,25 +56,27 @@ class Listener:
         # logging.getLogger('enocean.communicators.Communicator').setLevel(logging.WARN)
         communicator = SerialCommunicator(port=self.port)
         communicator.start()
-        logging.debug(f"The Base ID of your module is {enocean.utils.to_hex_string(communicator.base_id)}")
 
         if communicator.base_id is not None:
+            logging.debug(f"The Base ID of your module is {enocean.utils.to_hex_string(communicator.base_id)}")
             communicator.send(self.assemble_radio_packet(communicator.base_id))
 
-        while communicator.is_alive():
-            try:
-                packet = communicator.receive.get(block=True, timeout=1)
-                if packet.packet_type == PACKET.RADIO_ERP1 and packet.rorg == RORG.RPS:
-                    self.handle_packet(packet)
-                else:
-                    logging.debug(f"Ignoring packet {packet}")
-            except queue.Empty:
-                continue
-            except KeyboardInterrupt:
-                break
-            except Exception:
-                traceback.print_exc(file=sys.stdout)
-                break
+            while communicator.is_alive():
+                try:
+                    packet = communicator.receive.get(block=True, timeout=1)
+                    if packet.packet_type == PACKET.RADIO_ERP1 and packet.rorg == RORG.RPS:
+                        self.handle_packet(packet)
+                    else:
+                        logging.debug(f"Ignoring packet {packet}")
+                except queue.Empty:
+                    continue
+                except KeyboardInterrupt:
+                    break
+                except Exception:
+                    logging.error("Failed receiving message")
+                    break
+        else:
+            logging.error(f"Unable to connect using port {self.port}")
 
         if communicator.is_alive():
             communicator.stop()
